@@ -305,6 +305,14 @@
         <div class="hud-label" id="lblLeaderboard" style="margin-bottom:8px;">🏆 LEADERBOARD</div>
         <div id="leaderboardListStart" style="font-size:13px; color:#d8d0f5;">불러오는 중...</div>
       </div>
+      <div style="margin-top:18px;">
+        <ins class="adsbygoogle" id="adUnitStart"
+             style="display:block"
+             data-ad-client="ca-pub-8906694188680429"
+             data-ad-slot="8957735561"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
       <div style="margin-top:14px; font-size:11px; color:#7d70a8;">
         <a href="about.html" style="color:#a596e0; text-decoration:none;">소개</a>
         &nbsp;·&nbsp;
@@ -325,6 +333,14 @@
       <div id="leaderboardWin" style="margin-top:18px; text-align:left;">
         <div class="hud-label" id="lblLeaderboardWin" style="margin-bottom:8px;">🏆 LEADERBOARD</div>
         <div id="leaderboardListWin" style="font-size:13px; color:#d8d0f5;">불러오는 중...</div>
+      </div>
+      <div style="margin-top:18px;">
+        <ins class="adsbygoogle" id="adUnitWin"
+             style="display:block"
+             data-ad-client="ca-pub-8906694188680429"
+             data-ad-slot="8957735561"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
       </div>
     </div>
   </div>
@@ -406,6 +422,21 @@
   }
 
   loadLeaderboard();
+
+  // ---------------- AdSense ----------------
+  const loadedAds = new Set();
+  function loadAd(id){
+    if(loadedAds.has(id)) return;
+    const el = document.getElementById(id);
+    if(!el) return;
+    loadedAds.add(id);
+    try{
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    }catch(err){
+      console.error('AdSense load error:', err);
+    }
+  }
+  loadAd('adUnitStart');
 
   // ---------------- i18n ----------------
   const I18N = {
@@ -808,7 +839,10 @@
     winScore.textContent = score;
     winCombo.textContent = maxCombo;
     submitScore(nicknameInput.value.trim(), score, maxCombo);
-    setTimeout(()=>winOverlay.classList.remove('hidden'), 300);
+    setTimeout(()=>{
+      winOverlay.classList.remove('hidden');
+      loadAd('adUnitWin');
+    }, 300);
   }
 
   startBtn.addEventListener('click', startGame);
