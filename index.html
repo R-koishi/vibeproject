@@ -190,9 +190,9 @@
     -webkit-mask: radial-gradient(circle, transparent 58%, black 60%);
             mask: radial-gradient(circle, transparent 58%, black 60%);
   }
-  .circle.multi-pulse{ animation: multiPulse 0.18s ease-out; }
+  .circle.multi-pulse{ animation: multiPulse 0.18s ease-out forwards; }
   @keyframes multiPulse{
-    0%{ transform: scale(1.22); filter:brightness(1.6); }
+    0%{ transform: scale(var(--pulseScale,1.22)); filter:brightness(var(--pulseBright,1.6)); }
     100%{ transform: scale(1); filter:brightness(1); }
   }
 
@@ -686,6 +686,9 @@
     tone(map[type]||600, 0.12, 'triangle', 0.16);
     tone((map[type]||600)*1.5, 0.08, 'sine', 0.08, 0.02);
   }
+  function sfxMultiTick(count){
+    tone(480 + count*90, 0.06, 'square', 0.13);
+  }
   function sfxMiss(){ tone(180,0.25,'sawtooth',0.14); tone(120,0.3,'sawtooth',0.1,0.05); }
   function sfxWrong(){ tone(140,0.15,'square',0.12); }
   function sfxCombo(tier){
@@ -926,23 +929,45 @@
   function registerMultiClick(c){
     if(!c.alive) return;
     const now = performance.now();
+    const required = c.type.requiredClicks || 4;
+    const fill = c.el.querySelector('.holdfill');
+    const iconEl = c.el.querySelector('.icon');
     if(c.multiLast!==undefined && (now - c.multiLast) > MULTI_GAP_MS){
       c.multiCount = 0; // too slow, streak broken — start over
+      if(fill) fill.style.setProperty('--charge', '0');
+      if(iconEl) iconEl.textContent = c.type.icon;
     }
     if(!c.multiCount) pauseTimer(c); // freeze the auto-expire bar while mid-streak
     c.multiCount = (c.multiCount||0) + 1;
     c.multiLast = now;
     clearTimeout(c.multiResumeTimeout);
-    const required = c.type.requiredClicks || 4;
+
+    // per-tap impact feedback: sound, particle burst, growing charge ring, countdown
+    const rect = c.el.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
+    const cx = rect.left - stageRect.left + rect.width/2;
+    const cy = rect.top - stageRect.top + rect.height/2;
+    spawnBurst(cx, cy, getComputedStyle(c.el).color, 5 + c.multiCount*2);
+    sfxMultiTick(c.multiCount);
+    if(fill) fill.style.setProperty('--charge', Math.min(100, (c.multiCount/required)*100).toFixed(1));
+    if(iconEl) iconEl.textContent = 'x'+Math.max(0, required - c.multiCount);
+
     if(c.multiCount >= required){
       onCorrectClick(c, null);
     } else {
+      c.el.style.setProperty('--pulseScale', Math.min(1.55, 1.18 + c.multiCount*0.09).toFixed(2));
+      c.el.style.setProperty('--pulseBright', (1.4 + c.multiCount*0.15).toFixed(2));
       c.el.classList.remove('multi-pulse');
       void c.el.offsetWidth;
       c.el.classList.add('multi-pulse');
       // if the player stalls out, give back the remaining time after the gap window
       c.multiResumeTimeout = setTimeout(()=>{
-        if(c.alive){ c.multiCount = 0; resumeTimer(c); }
+        if(c.alive){
+          c.multiCount = 0;
+          resumeTimer(c);
+          if(fill) fill.style.setProperty('--charge', '0');
+          if(iconEl) iconEl.textContent = c.type.icon;
+        }
       }, MULTI_GAP_MS + 20);
     }
   }
@@ -964,7 +989,7 @@
     el.style.width = size+'px'; el.style.height = size+'px';
     el.style.left = x+'px'; el.style.top = y+'px';
     const iconFontSize = type.icon.length > 2 ? Math.max(11, size*0.22) : 20;
-    const holdfillHtml = type.key==='hold' ? '<div class="holdfill"></div>' : '';
+    const holdfillHtml = (type.key==='hold' || type.key==='multi') ? '<div class="holdfill"></div>' : '';
     el.innerHTML = `<div class="ring"></div>${holdfillHtml}<div class="icon" style="font-size:${iconFontSize}px;">${type.icon}</div><div class="timerbar"><div class="timerfill"></div></div>`;
 
     const {lifespan} = diffParams();
