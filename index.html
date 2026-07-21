@@ -49,6 +49,8 @@
     --magenta: #ff2e88;
     --violet: #7b2ff7;
     --gold: #ffd23f;
+    --holdcolor: #00ffa3;
+    --multicolor: #ff6f3c;
     --white: #f4f2ff;
     --danger: #ff3b3b;
     --panel: rgba(18,11,36,0.72);
@@ -143,6 +145,8 @@
   .dot-left{ background: var(--cyan); color:var(--cyan); }
   .dot-right{ background: var(--magenta); color:var(--magenta); }
   .dot-both{ background: var(--violet); color:var(--violet); }
+  .dot-hold{ background: var(--holdcolor); color:var(--holdcolor); }
+  .dot-multi{ background: var(--multicolor); color:var(--multicolor); }
 
   /* ---------- Circles ---------- */
   .circle{
@@ -172,6 +176,25 @@
   .type-left{ background: radial-gradient(circle at 35% 30%, #7ffcff, var(--cyan)); color: var(--cyan); box-shadow: 0 0 26px var(--cyan); }
   .type-right{ background: radial-gradient(circle at 35% 30%, #ff9dc6, var(--magenta)); color: var(--magenta); box-shadow: 0 0 26px var(--magenta); }
   .type-both{ background: radial-gradient(circle at 35% 30%, #cfa8ff, var(--violet)); color: var(--violet); box-shadow: 0 0 26px var(--violet); }
+  .type-hold{ background: radial-gradient(circle at 35% 30%, #b6ffe0, var(--holdcolor)); color: var(--holdcolor); box-shadow: 0 0 26px var(--holdcolor); }
+  .type-multi{ background: radial-gradient(circle at 35% 30%, #ffcbb0, var(--multicolor)); color: var(--multicolor); box-shadow: 0 0 26px var(--multicolor); }
+  .circle.holding{ animation: holdPulse 0.6s ease-in-out infinite; }
+  @keyframes holdPulse{
+    0%{ filter:brightness(1); transform: scale(1); }
+    50%{ filter:brightness(1.5); transform: scale(1.08); }
+    100%{ filter:brightness(1); transform: scale(1); }
+  }
+  .holdfill{
+    position:absolute; inset:0; border-radius:50%; pointer-events:none;
+    background: conic-gradient(rgba(255,255,255,0.95) calc(var(--charge,0) * 1%), transparent 0);
+    -webkit-mask: radial-gradient(circle, transparent 58%, black 60%);
+            mask: radial-gradient(circle, transparent 58%, black 60%);
+  }
+  .circle.multi-pulse{ animation: multiPulse 0.18s ease-out; }
+  @keyframes multiPulse{
+    0%{ transform: scale(1.22); filter:brightness(1.6); }
+    100%{ transform: scale(1); filter:brightness(1); }
+  }
 
   .circle.dying{ animation: dyingPop 0.16s ease forwards; pointer-events:none; }
   @keyframes dyingPop{ to{ transform: scale(1.5); opacity:0; } }
@@ -276,6 +299,8 @@
     <div class="legend-item"><span class="legend-dot dot-left"></span><span id="legLeft">좌클릭</span></div>
     <div class="legend-item"><span class="legend-dot dot-right"></span><span id="legRight">우클릭</span></div>
     <div class="legend-item"><span class="legend-dot dot-both"></span><span id="legBoth">좌우 동시클릭</span></div>
+    <div class="legend-item"><span class="legend-dot dot-hold"></span><span id="legHold">꾹 클릭(홀드)</span></div>
+    <div class="legend-item"><span class="legend-dot dot-multi"></span><span id="legMulti">연속 클릭</span></div>
   </div>
 
   <!-- START -->
@@ -291,6 +316,29 @@
         <div><span class="k dot-left"></span> <span id="miniLeft">좌클릭 원 — 10점</span></div>
         <div><span class="k dot-right"></span> <span id="miniRight">우클릭 원 — 10점</span></div>
         <div><span class="k dot-both"></span> <span id="miniBoth">좌우 동시클릭 원 — 25점 (희귀)</span></div>
+        <div><span class="k dot-hold"></span> <span id="miniHold">꾹 클릭(홀드) 원 — 20점</span></div>
+        <div><span class="k dot-multi"></span> <span id="miniMulti">연속 클릭 원 — 20점</span></div>
+      </div>
+
+      <div class="field">
+        <label id="lblSelectTypes">등장시킬 클릭 방식 선택</label>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;">
+          <label style="display:flex; align-items:center; gap:5px; font-size:13px; color:#dcd4f7;">
+            <input type="checkbox" id="chkLeft" checked><span id="chkLeftLabel">좌클릭</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:5px; font-size:13px; color:#dcd4f7;">
+            <input type="checkbox" id="chkRight" checked><span id="chkRightLabel">우클릭</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:5px; font-size:13px; color:#dcd4f7;">
+            <input type="checkbox" id="chkBoth" checked><span id="chkBothLabel">좌우동시</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:5px; font-size:13px; color:#dcd4f7;">
+            <input type="checkbox" id="chkHold" checked><span id="chkHoldLabel">꾹클릭</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:5px; font-size:13px; color:#dcd4f7;">
+            <input type="checkbox" id="chkMulti" checked><span id="chkMultiLabel">연속클릭</span>
+          </label>
+        </div>
       </div>
       <div class="field">
         <label id="lblNickname">닉네임 (리더보드용)</label>
@@ -359,6 +407,11 @@
   const startOverlay = document.getElementById('startOverlay');
   const winOverlay = document.getElementById('winOverlay');
   const goalInput = document.getElementById('goalInput');
+  const chkLeft = document.getElementById('chkLeft');
+  const chkRight = document.getElementById('chkRight');
+  const chkBoth = document.getElementById('chkBoth');
+  const chkHold = document.getElementById('chkHold');
+  const chkMulti = document.getElementById('chkMulti');
   const startBtn = document.getElementById('startBtn');
   const continueBtn = document.getElementById('continueBtn');
   const restartFromWinBtn = document.getElementById('restartFromWinBtn');
@@ -449,7 +502,11 @@
       winTitle:'목표 달성!', winSubtitle:'목표 수익을 달성했습니다. 계속 플레이하거나 다시 시작할 수 있어요.',
       finalScore:'최종 점수', maxCombo:'최고 콤보',
       continueBtn:'계속 플레이 (목표 1.5배 상향)', restartBtn:'다시 시작',
-      nickname:'닉네임 (리더보드용)', leaderboard:'🏆 리더보드' },
+      nickname:'닉네임 (리더보드용)', leaderboard:'🏆 리더보드',
+      miniHold:'꾹 클릭(홀드) 원 — 20점', miniMulti:'연속 클릭 원 — 20점',
+      legHold:'꾹 클릭(홀드)', legMulti:'연속 클릭',
+      selectTypes:'등장시킬 클릭 방식 선택',
+      chkLeft:'좌클릭', chkRight:'우클릭', chkBoth:'좌우동시', chkHold:'꾹클릭', chkMulti:'연속클릭' },
     en: { name:'English',
       intro:'Click the circles that appear before time runs out — using the right method.<br>The higher your combo, the faster it gets and the screen starts to shake.',
       miniLeft:'Left-click circle — 10 pts', miniRight:'Right-click circle — 10 pts', miniBoth:'Left+Right at once — 25 pts (rare)',
@@ -459,7 +516,11 @@
       winTitle:'Target Reached!', winSubtitle:'You hit your target score. Keep playing or start over.',
       finalScore:'Final Score', maxCombo:'Best Combo',
       continueBtn:'Keep Playing (target x1.5)', restartBtn:'Restart',
-      nickname:'Nickname (for leaderboard)', leaderboard:'🏆 LEADERBOARD' },
+      nickname:'Nickname (for leaderboard)', leaderboard:'🏆 LEADERBOARD',
+      miniHold:'Hold circle — 20 pts', miniMulti:'Rapid-click circle — 20 pts',
+      legHold:'Hold click', legMulti:'Rapid click',
+      selectTypes:'Select click types to include',
+      chkLeft:'Left click', chkRight:'Right click', chkBoth:'Left+Right', chkHold:'Hold', chkMulti:'Rapid click' },
     ja: { name:'日本語',
       intro:'時間切れになる前に、正しい方法で円をクリックしてください。<br>コンボが増えるほど速度が上がり、画面が揺れます。',
       miniLeft:'左クリックの円 — 10点', miniRight:'右クリックの円 — 10点', miniBoth:'左右同時クリック — 25点（レア）',
@@ -469,7 +530,11 @@
       winTitle:'目標達成！', winSubtitle:'目標スコアを達成しました。続けるか、最初からやり直せます。',
       finalScore:'最終スコア', maxCombo:'最大コンボ',
       continueBtn:'続ける（目標 x1.5）', restartBtn:'最初から',
-      nickname:'ニックネーム（ランキング用）', leaderboard:'🏆 ランキング' },
+      nickname:'ニックネーム（ランキング用）', leaderboard:'🏆 ランキング',
+      miniHold:'長押しの円 — 20点', miniMulti:'連打の円 — 20点',
+      legHold:'長押し', legMulti:'連打',
+      selectTypes:'出現させるクリック方式を選択',
+      chkLeft:'左クリック', chkRight:'右クリック', chkBoth:'左右同時', chkHold:'長押し', chkMulti:'連打' },
     zh: { name:'中文',
       intro:'在时间耗尽前，用正确的方式点击出现的圆圈。<br>连击越高，速度越快，屏幕也会震动。',
       miniLeft:'左键点击圆 — 10分', miniRight:'右键点击圆 — 10分', miniBoth:'左右同时点击 — 25分（稀有）',
@@ -479,7 +544,11 @@
       winTitle:'达成目标！', winSubtitle:'你已达成目标分数。可以继续游戏或重新开始。',
       finalScore:'最终分数', maxCombo:'最高连击',
       continueBtn:'继续游戏（目标 x1.5）', restartBtn:'重新开始',
-      nickname:'昵称（用于排行榜）', leaderboard:'🏆 排行榜' },
+      nickname:'昵称（用于排行榜）', leaderboard:'🏆 排行榜',
+      miniHold:'长按圆 — 20分', miniMulti:'连续点击圆 — 20分',
+      legHold:'长按', legMulti:'连续点击',
+      selectTypes:'选择要出现的点击方式',
+      chkLeft:'左键点击', chkRight:'右键点击', chkBoth:'左右同时', chkHold:'长按', chkMulti:'连续点击' },
     es: { name:'Español',
       intro:'Haz clic en los círculos antes de que se acabe el tiempo, con el método correcto.<br>Cuanto mayor sea tu combo, más rápido va todo y la pantalla empieza a temblar.',
       miniLeft:'Círculo clic izquierdo — 10 pts', miniRight:'Círculo clic derecho — 10 pts', miniBoth:'Izquierdo+derecho a la vez — 25 pts (raro)',
@@ -489,7 +558,11 @@
       winTitle:'¡Objetivo alcanzado!', winSubtitle:'Has alcanzado tu puntuación objetivo. Sigue jugando o vuelve a empezar.',
       finalScore:'Puntuación final', maxCombo:'Mejor combo',
       continueBtn:'Seguir jugando (objetivo x1.5)', restartBtn:'Reiniciar',
-      nickname:'Apodo (para el ranking)', leaderboard:'🏆 CLASIFICACIÓN' },
+      nickname:'Apodo (para el ranking)', leaderboard:'🏆 CLASIFICACIÓN',
+      miniHold:'Círculo de mantener pulsado — 20 pts', miniMulti:'Círculo de clics rápidos — 20 pts',
+      legHold:'Mantener pulsado', legMulti:'Clics rápidos',
+      selectTypes:'Elige los tipos de clic a incluir',
+      chkLeft:'Clic izquierdo', chkRight:'Clic derecho', chkBoth:'Izq+Der', chkHold:'Mantener', chkMulti:'Clics rápidos' },
   };
   let currentLang = 'ko';
   const langSelectHud = document.getElementById('langSelectHud');
@@ -529,6 +602,16 @@
     document.getElementById('lblNickname').textContent = t.nickname;
     document.getElementById('lblLeaderboard').textContent = t.leaderboard;
     document.getElementById('lblLeaderboardWin').textContent = t.leaderboard;
+    document.getElementById('miniHold').textContent = t.miniHold;
+    document.getElementById('miniMulti').textContent = t.miniMulti;
+    document.getElementById('legHold').textContent = t.legHold;
+    document.getElementById('legMulti').textContent = t.legMulti;
+    document.getElementById('lblSelectTypes').textContent = t.selectTypes;
+    document.getElementById('chkLeftLabel').textContent = t.chkLeft;
+    document.getElementById('chkRightLabel').textContent = t.chkRight;
+    document.getElementById('chkBothLabel').textContent = t.chkBoth;
+    document.getElementById('chkHoldLabel').textContent = t.chkHold;
+    document.getElementById('chkMultiLabel').textContent = t.chkMulti;
   }
   langSelectHud.addEventListener('change', e=>applyLanguage(e.target.value));
   langSelectStart.addEventListener('change', e=>applyLanguage(e.target.value));
@@ -599,7 +682,7 @@
     osc.start(t0); osc.stop(t0+dur+0.02);
   }
   function sfxPop(type){
-    const map = { left:660, right:520, both:760 };
+    const map = { left:660, right:520, both:760, hold:420, multi:880 };
     tone(map[type]||600, 0.12, 'triangle', 0.16);
     tone((map[type]||600)*1.5, 0.08, 'sine', 0.08, 0.02);
   }
@@ -619,16 +702,22 @@
   let running=false, score=0, combo=0, maxCombo=0, goal=1000;
   let active=[]; let spawnTimeoutId=null; let idCounter=0;
   const TYPES = [
-    {key:'left',  cls:'type-left',  weight:40, points:10, icon:'L'},
-    {key:'right', cls:'type-right', weight:40, points:10, icon:'R'},
-    {key:'both',  cls:'type-both',  weight:20, points:25, icon:'L+R'},
+    {key:'left',  cls:'type-left',  weight:26, points:10, icon:'L'},
+    {key:'right', cls:'type-right', weight:26, points:10, icon:'R'},
+    {key:'both',  cls:'type-both',  weight:16, points:25, icon:'L+R'},
+    {key:'hold',  cls:'type-hold',  weight:16, points:20, icon:'HOLD', holdMs:650},
+    {key:'multi', cls:'type-multi', weight:16, points:20, icon:'x4', requiredClicks:4},
   ];
   const BOTH_WINDOW_MS = 200; // max gap allowed between the two clicks to count as simultaneous
+  const MULTI_GAP_MS = 260; // max gap allowed between consecutive clicks to keep the streak alive
+  let enabledTypes = new Set(['left','right','both','hold','multi']);
   function pickType(){
-    const total = TYPES.reduce((s,t)=>s+t.weight,0);
+    const pool = TYPES.filter(t=>enabledTypes.has(t.key));
+    const list = pool.length ? pool : TYPES;
+    const total = list.reduce((s,t)=>s+t.weight,0);
     let r = Math.random()*total;
-    for(const t of TYPES){ if(r<t.weight) return t; r-=t.weight; }
-    return TYPES[0];
+    for(const t of list){ if(r<t.weight) return t; r-=t.weight; }
+    return list[0];
   }
 
   function diffParams(){
@@ -739,12 +828,16 @@
     evt.preventDefault(); evt.stopPropagation();
     if(!running || !c.alive) return;
     const btn = evt.button; // 0 = left, 2 = right (middle button ignored)
+    const key = c.type.key;
+
+    if(key==='hold'){ if(btn===0) startHold(c); return; }
+    if(key==='multi'){ if(btn===0) registerMultiClick(c); return; }
+
     if(btn!==0 && btn!==2) return;
 
     const now = performance.now();
     if(!c.press) c.press = {};
     c.press[btn] = now;
-    const key = c.type.key;
 
     if(key==='both'){
       const other = btn===0 ? 2 : 0;
@@ -765,6 +858,95 @@
     else onWrongClick(c);
   }
 
+  // pause/resume the auto-expire countdown while the player is actively
+  // mid-interaction (holding, or mid-way through a rapid-click streak) so a
+  // circle never vanishes out from under an engaged player. The countdown
+  // itself is driven by timerTick() below, so pausing is just a flag —
+  // no CSS-transition interruption tricks that browsers can misreport.
+  function pauseTimer(c){ c.timerPaused = true; }
+  function resumeTimer(c){ c.timerPaused = false; }
+
+  function timerTick(now){
+    for(const c of active){
+      if(!c.alive) continue;
+      if(c.lastTick===undefined) c.lastTick = now;
+      if(!c.timerPaused){
+        c.elapsed += (now - c.lastTick);
+      }
+      c.lastTick = now;
+      const remainRatio = Math.max(0, 1 - c.elapsed / c.lifespan);
+      const fill = c.el && c.el.querySelector('.timerfill');
+      if(fill) fill.style.transform = `scaleX(${remainRatio})`;
+      if(remainRatio<=0 && !c.timerPaused){
+        onMiss(c);
+      }
+    }
+    requestAnimationFrame(timerTick);
+  }
+  requestAnimationFrame(timerTick);
+
+  function startHold(c){
+    if(c.holding || !c.alive) return;
+    c.holding = true;
+    c.el.classList.add('holding');
+    pauseTimer(c); // freeze the auto-expire bar while actively holding
+    const ms = c.type.holdMs || 650;
+    const holdfill = c.el.querySelector('.holdfill');
+    const startTime = performance.now();
+    if(holdfill){
+      function chargeStep(){
+        if(!c.holding) return;
+        const pct = Math.min(100, ((performance.now()-startTime)/ms)*100);
+        holdfill.style.setProperty('--charge', pct.toFixed(1));
+        if(pct<100) c.chargeRAF = requestAnimationFrame(chargeStep);
+      }
+      c.chargeRAF = requestAnimationFrame(chargeStep);
+    }
+    c.holdTimeout = setTimeout(()=>{
+      if(c.holding && c.alive){ c.holding=false; onCorrectClick(c, null); }
+    }, ms);
+  }
+  function cancelHold(c){
+    if(!c.holding) return;
+    c.holding = false;
+    clearTimeout(c.holdTimeout);
+    cancelAnimationFrame(c.chargeRAF);
+    if(c.el){
+      c.el.classList.remove('holding');
+      const holdfill = c.el.querySelector('.holdfill');
+      if(holdfill) holdfill.style.setProperty('--charge', '0');
+    }
+    resumeTimer(c); // give back the remaining time that was frozen
+    onWrongClick(c);
+  }
+  document.addEventListener('mouseup', ()=>{
+    active.forEach(c=>{ if(c.holding) cancelHold(c); });
+  });
+
+  function registerMultiClick(c){
+    if(!c.alive) return;
+    const now = performance.now();
+    if(c.multiLast!==undefined && (now - c.multiLast) > MULTI_GAP_MS){
+      c.multiCount = 0; // too slow, streak broken — start over
+    }
+    if(!c.multiCount) pauseTimer(c); // freeze the auto-expire bar while mid-streak
+    c.multiCount = (c.multiCount||0) + 1;
+    c.multiLast = now;
+    clearTimeout(c.multiResumeTimeout);
+    const required = c.type.requiredClicks || 4;
+    if(c.multiCount >= required){
+      onCorrectClick(c, null);
+    } else {
+      c.el.classList.remove('multi-pulse');
+      void c.el.offsetWidth;
+      c.el.classList.add('multi-pulse');
+      // if the player stalls out, give back the remaining time after the gap window
+      c.multiResumeTimeout = setTimeout(()=>{
+        if(c.alive){ c.multiCount = 0; resumeTimer(c); }
+      }, MULTI_GAP_MS + 20);
+    }
+  }
+
   function spawnCircle(){
     if(!running) return;
     const {maxConcurrent} = diffParams();
@@ -781,10 +963,12 @@
     el.className = 'circle '+type.cls;
     el.style.width = size+'px'; el.style.height = size+'px';
     el.style.left = x+'px'; el.style.top = y+'px';
-    el.innerHTML = `<div class="ring"></div><div class="icon">${type.icon}</div><div class="timerbar"><div class="timerfill"></div></div>`;
+    const iconFontSize = type.icon.length > 2 ? Math.max(11, size*0.22) : 20;
+    const holdfillHtml = type.key==='hold' ? '<div class="holdfill"></div>' : '';
+    el.innerHTML = `<div class="ring"></div>${holdfillHtml}<div class="icon" style="font-size:${iconFontSize}px;">${type.icon}</div><div class="timerbar"><div class="timerfill"></div></div>`;
 
     const {lifespan} = diffParams();
-    const c = { id: ++idCounter, el, type, alive:true };
+    const c = { id: ++idCounter, el, type, alive:true, lifespan, elapsed:0, timerPaused:false, lastTick:undefined };
 
     el.addEventListener('mousedown', (e)=>handlePointer(c,e));
     el.addEventListener('contextmenu', (e)=>e.preventDefault());
@@ -794,16 +978,7 @@
 
     const fill = el.querySelector('.timerfill');
     fill.style.transition = 'none';
-    fill.style.transform = 'scaleX(1)';
-    requestAnimationFrame(()=>{
-      // force a style flush so the browser registers the starting state before we animate
-      void fill.offsetWidth;
-      requestAnimationFrame(()=>{
-        fill.style.transition = `transform ${lifespan}ms linear`;
-        fill.style.transform = 'scaleX(0)';
-      });
-    });
-    fill.addEventListener('transitionend', ()=>{ onMiss(c); }, {once:true});
+    fill.style.transform = 'scaleX(1)'; // timerTick() drives the countdown from here every frame
 
     scheduleNextSpawn();
   }
@@ -823,6 +998,14 @@
   function startGame(){
     ensureAudio();
     goal = Math.max(100, parseInt(goalInput.value)||1000);
+    const selected = new Set();
+    if(chkLeft.checked) selected.add('left');
+    if(chkRight.checked) selected.add('right');
+    if(chkBoth.checked) selected.add('both');
+    if(chkHold.checked) selected.add('hold');
+    if(chkMulti.checked) selected.add('multi');
+    enabledTypes = selected.size ? selected : new Set(['left','right','both','hold','multi']);
+    if(!selected.size){ chkLeft.checked=chkRight.checked=chkBoth.checked=chkHold.checked=chkMulti.checked=true; }
     score=0; combo=0; maxCombo=0; running=true;
     updateHud();
     startOverlay.classList.add('hidden');
