@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>네온 펄스 (NEON PULSE) — 반사신경 클릭 게임 | 무료 브라우저 게임</title>
-<meta name="description" content="좌클릭, 우클릭, 좌우 동시클릭으로 랜덤하게 나타나는 원을 빠르게 클릭하는 무료 반사신경 게임. 콤보를 쌓아 점수를 올리고 목표 점수를 달성해보세요. 설치 없이 브라우저에서 바로 플레이.">
+<meta name="description" content="좌클릭, 우클릭, 좌우 동시클릭으로 랜덤하게 나타나는 원을 빠르게 클릭하는 무료 반사신경 게임. 콤보를 쌓아 점수를 올리고 목숨을 지키며 최고 기록에 도전하세요. 설치 없이 브라우저에서 바로 플레이.">
 <meta name="keywords" content="반사신경 게임, 클릭 게임, 무료 브라우저 게임, 콤보 게임, 좌클릭 우클릭 게임, reflex clicker game, neon pulse">
 <meta name="author" content="Neon Pulse">
 <meta name="robots" content="index, follow">
@@ -23,7 +23,7 @@
 <!-- Twitter -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="네온 펄스 — 반사신경 클릭 게임">
-<meta name="twitter:description" content="콤보를 쌓아 목표 점수를 달성하는 무료 브라우저 반사신경 게임.">
+<meta name="twitter:description" content="콤보를 쌓아 최고 점수에 도전하는 무료 브라우저 반사신경 게임.">
 
 <!-- Structured data -->
 <script type="application/ld+json">
@@ -69,14 +69,15 @@
       linear-gradient(90deg, rgba(123,47,247,0.06) 1px, transparent 1px);
     background-size: 42px 42px;
   }
-  #stage.shake{ animation: shakeAnim 0.28s ease; }
+  #stage.shake{ animation: shakeAnim 0.32s ease; }
   @keyframes shakeAnim{
-    0%{ transform: translate(0,0); }
-    20%{ transform: translate(var(--sx), var(--sy)) rotate(-0.4deg); }
-    40%{ transform: translate(calc(var(--sx) * -1), calc(var(--sy) * 0.6)) rotate(0.4deg); }
-    60%{ transform: translate(calc(var(--sx) * 0.6), calc(var(--sy) * -1)) rotate(-0.3deg); }
-    80%{ transform: translate(calc(var(--sx) * -0.4), calc(var(--sy) * 0.3)) rotate(0.2deg); }
-    100%{ transform: translate(0,0) rotate(0); }
+    0%{ transform: translate(0,0) scale(1); }
+    12%{ transform: translate(var(--sx), var(--sy)) scale(var(--punch,1)) rotate(-0.7deg); }
+    30%{ transform: translate(calc(var(--sx) * -1), calc(var(--sy) * 0.6)) scale(1.01) rotate(0.7deg); }
+    50%{ transform: translate(calc(var(--sx) * 0.7), calc(var(--sy) * -1)) scale(1.005) rotate(-0.5deg); }
+    70%{ transform: translate(calc(var(--sx) * -0.5), calc(var(--sy) * 0.4)) rotate(0.35deg); }
+    85%{ transform: translate(calc(var(--sx) * 0.25), calc(var(--sy) * -0.2)) rotate(-0.15deg); }
+    100%{ transform: translate(0,0) rotate(0) scale(1); }
   }
 
   /* ---------- HUD ---------- */
@@ -94,45 +95,101 @@
   .hud-value{ font-size:26px; font-weight:900; font-family: 'Impact','Arial Narrow',sans-serif; letter-spacing:1px; }
   #scoreVal{ color: var(--cyan); text-shadow:0 0 14px rgba(0,240,255,0.7); }
   #comboWrap{ text-align:center; min-width:120px; }
-  #comboVal{ color: var(--gold); text-shadow:0 0 16px rgba(255,210,63,0.8); font-size:34px; transition: transform 0.12s, color 0.3s, text-shadow 0.3s; }
-  #comboVal.pop{ transform: scale(1.35); }
-  #comboVal.fire-1{ color:#ffb238; text-shadow:0 0 14px #ff8a00, 0 0 26px #ff5500; animation: flicker 0.5s infinite alternate; }
-  #comboVal.fire-2{ color:#ff7a1a; text-shadow:0 0 16px #ff5500, 0 0 32px #ff2200, 0 0 46px #ff0044; animation: flicker 0.35s infinite alternate; }
-  #comboVal.fire-3{ color:#ffd23f; text-shadow:0 0 18px #ff3d00, 0 0 34px #ff0044, 0 0 54px #ff00aa; animation: flicker 0.22s infinite alternate; }
+  #comboVal{ color: var(--gold); text-shadow:0 0 16px rgba(255,210,63,0.8); font-size:34px; transition: transform 0.1s cubic-bezier(.3,1.8,.4,1), color 0.3s, text-shadow 0.3s; }
+  #comboVal.pop{ transform: scale(1.6); }
+  #comboVal.fire-1{ color:#7ffcff; text-shadow:0 0 14px #00f0ff, 0 0 26px #00c8ff; animation: flicker 0.4s infinite alternate; }
+  #comboVal.fire-2{ color:#cfa8ff; text-shadow:0 0 16px #7b2ff7, 0 0 32px #9d4dff, 0 0 46px #00f0ff; animation: flicker 0.26s infinite alternate; }
+  #comboVal.fire-3{ color:#ff9dc6; text-shadow:0 0 18px #ff2e88, 0 0 34px #7b2ff7, 0 0 54px #00f0ff; animation: flicker 0.16s infinite alternate; }
+  #comboVal.fire-4{ color:#ffffff; text-shadow:0 0 20px #00f0ff, 0 0 40px #ff2e88, 0 0 64px #7b2ff7; animation: flicker 0.09s infinite alternate; }
   @keyframes flicker{
     0%{ transform: scale(1) translateY(0); filter:brightness(1); }
-    100%{ transform: scale(1.06) translateY(-1px); filter:brightness(1.25); }
+    100%{ transform: scale(1.09) translateY(-1px); filter:brightness(1.4); }
   }
 
-  /* ---------- Fire / heat ambience ---------- */
+  /* ---------- Electric pulse ambience ---------- */
   #fireOverlay{
     position:absolute; inset:0; z-index:4; pointer-events:none; opacity:0;
-    background: radial-gradient(ellipse at 50% 115%, rgba(255,90,0,0.55) 0%, rgba(255,40,0,0.25) 28%, transparent 62%);
+    background: radial-gradient(ellipse at 50% 115%, rgba(0,240,255,0.5) 0%, rgba(123,47,247,0.3) 30%, transparent 65%);
     transition: opacity 0.5s ease;
   }
-  #fireOverlay.on1{ opacity:0.35; }
-  #fireOverlay.on2{ opacity:0.6; }
-  #fireOverlay.on3{ opacity:0.9; animation: heatPulse 0.6s infinite alternate; }
-  @keyframes heatPulse{ 0%{ opacity:0.75; } 100%{ opacity:1; } }
-  #stage.heat1{ box-shadow: inset 0 0 90px 10px rgba(255,110,0,0.18); }
-  #stage.heat2{ box-shadow: inset 0 0 130px 20px rgba(255,70,0,0.3); }
-  #stage.heat3{ box-shadow: inset 0 0 180px 30px rgba(255,40,0,0.42); }
+  #fireOverlay.on1{ opacity:0.4; }
+  #fireOverlay.on2{ opacity:0.68; }
+  #fireOverlay.on3{ opacity:0.95; animation: heatPulse 0.5s infinite alternate; }
+  #fireOverlay.on4{
+    opacity:1; animation: heatPulse 0.22s infinite alternate;
+    background: radial-gradient(ellipse at 50% 115%, rgba(190,255,255,0.75) 0%, rgba(0,240,255,0.5) 25%, rgba(255,46,136,0.35) 50%, transparent 75%);
+  }
+  @keyframes heatPulse{ 0%{ opacity:0.8; } 100%{ opacity:1; } }
+  #stage.heat1{ box-shadow: inset 0 0 90px 10px rgba(0,240,255,0.22); }
+  #stage.heat2{ box-shadow: inset 0 0 130px 20px rgba(123,47,247,0.32); }
+  #stage.heat3{ box-shadow: inset 0 0 180px 30px rgba(255,46,136,0.42); }
+  #stage.heat4{ box-shadow: inset 0 0 230px 40px rgba(0,240,255,0.5), inset 0 0 110px 12px rgba(255,46,136,0.4); }
+
+  #glitchOverlay{
+    position:absolute; inset:0; z-index:6; pointer-events:none; opacity:0; mix-blend-mode:screen;
+  }
+  #glitchOverlay.on{
+    opacity:0.55;
+    background: repeating-linear-gradient(0deg,
+      rgba(0,240,255,0.16) 0px, rgba(0,240,255,0.16) 1px,
+      rgba(255,46,136,0.12) 1px, rgba(255,46,136,0.12) 2px,
+      transparent 2px, transparent 4px);
+    animation: glitchShift 0.5s steps(3,end) infinite;
+  }
+  @keyframes glitchShift{
+    0%{ clip-path: inset(0 0 0 0); transform: translate(0,0); }
+    20%{ clip-path: inset(10% 0 62% 0); transform: translate(-6px,1px); }
+    40%{ clip-path: inset(64% 0 8% 0); transform: translate(6px,-1px); }
+    60%{ clip-path: inset(30% 0 42% 0); transform: translate(-3px,0); }
+    80%{ clip-path: inset(72% 0 4% 0); transform: translate(3px,1px); }
+    100%{ clip-path: inset(0 0 0 0); transform: translate(0,0); }
+  }
 
   .flame-particle{
-    position:absolute; bottom:-20px; z-index:5; pointer-events:none; border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
-    background: radial-gradient(circle at 50% 70%, #fff3b0 0%, #ffb238 35%, #ff5500 65%, transparent 75%);
-    filter: blur(0.5px);
+    position:absolute; bottom:-20px; z-index:5; pointer-events:none; border-radius:2px;
+    background: linear-gradient(180deg, #ffffff 0%, #7ffcff 40%, #7b2ff7 85%, transparent 100%);
+    box-shadow: 0 0 8px #00f0ff, 0 0 14px #7b2ff7;
+    filter: blur(0.3px);
     animation: flameRise linear forwards;
   }
   @keyframes flameRise{
-    0%{ transform: translateY(0) scale(1) rotate(0deg); opacity:0.9; }
-    70%{ opacity:0.8; }
+    0%{ transform: translateY(0) scale(1) rotate(0deg); opacity:1; }
+    15%{ opacity:0.35; }
+    35%{ opacity:1; }
+    75%{ opacity:0.6; }
     100%{ transform: translateY(var(--rise)) scale(0.2) rotate(var(--sway)); opacity:0; }
   }
-  #goalWrap{ min-width:200px; }
-  #goalBarOuter{ width:200px; height:10px; border-radius:6px; background:rgba(255,255,255,0.08); overflow:hidden; margin-top:6px; border:1px solid rgba(255,255,255,0.15); }
-  #goalBarInner{ height:100%; width:0%; background: linear-gradient(90deg,var(--magenta),var(--gold)); box-shadow:0 0 10px var(--gold); transition: width 0.25s ease; }
-  #goalText{ font-size:11px; margin-top:4px; color:#c9bff0; letter-spacing:0.5px; }
+
+  .shockwave{
+    position:absolute; border-radius:50%; pointer-events:none; z-index:14;
+    border:2px solid currentColor; box-shadow:0 0 12px currentColor, inset 0 0 8px currentColor;
+    transform:translate(-50%,-50%) scale(0.3); opacity:0.9;
+    animation: shockwaveExpand 0.5s ease-out forwards;
+  }
+  @keyframes shockwaveExpand{
+    to{ transform:translate(-50%,-50%) scale(1); opacity:0; }
+  }
+  #livesWrap{ text-align:center; }
+  #livesVal{ font-size:20px; color: var(--danger); text-shadow:0 0 10px rgba(255,59,59,0.7); letter-spacing:3px; }
+  #livesVal.lostpulse{ animation: livePulse 0.4s ease; }
+  @keyframes livePulse{
+    0%{ transform: scale(1.5); filter:brightness(1.9); }
+    100%{ transform: scale(1); filter:brightness(1); }
+  }
+  #stage.hitflash{ animation: hitFlash 0.35s ease; }
+  @keyframes hitFlash{
+    0%{ box-shadow: inset 0 0 160px 30px rgba(255,30,30,0.55); }
+    100%{ box-shadow: inset 0 0 0 0 rgba(255,30,30,0); }
+  }
+  .unlock-toast{
+    position:absolute; top:74px; left:50%; z-index:30; pointer-events:none;
+    padding:9px 20px; border-radius:12px; white-space:nowrap;
+    background: linear-gradient(90deg, rgba(0,240,255,0.2), rgba(123,47,247,0.2));
+    border:1px solid rgba(0,240,255,0.5); color:var(--white); font-weight:700; font-size:13px;
+    box-shadow:0 0 24px rgba(0,240,255,0.35);
+    opacity:0; transform:translate(-50%, -8px); transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .unlock-toast.show{ opacity:1; transform:translate(-50%, 0); }
 
   /* ---------- Legend ---------- */
   #legend{
@@ -140,7 +197,8 @@
     display:flex; gap:14px; z-index:20; pointer-events:none; flex-wrap:wrap; justify-content:center;
     background: var(--panel); padding:8px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);
   }
-  .legend-item{ display:flex; align-items:center; gap:6px; font-size:12px; color:#d8d0f5; }
+  .legend-item{ display:flex; align-items:center; gap:6px; font-size:12px; color:#d8d0f5; transition: opacity 0.3s ease, filter 0.3s ease; }
+  .legend-item.locked{ opacity:0.3; filter:grayscale(1); }
   .legend-dot{ width:14px; height:14px; border-radius:50%; box-shadow:0 0 8px currentColor; }
   .dot-left{ background: var(--cyan); color:var(--cyan); }
   .dot-right{ background: var(--magenta); color:var(--magenta); }
@@ -221,8 +279,9 @@
 
   /* ---------- Overlays ---------- */
   .overlay{
-    position:absolute; inset:0; z-index:50; display:flex; align-items:center; justify-content:center;
+    position:absolute; inset:0; z-index:50; display:flex; align-items:flex-start; justify-content:center;
     background: rgba(5,3,10,0.86); backdrop-filter: blur(4px);
+    overflow-y:auto; padding: max(24px, 5vh) 16px 40px;
   }
   .hidden{ display:none !important; }
   .card{
@@ -275,6 +334,7 @@
 
 <div id="stage">
   <div id="fireOverlay"></div>
+  <div id="glitchOverlay"></div>
   <div id="hud">
     <div class="hud-block">
       <div class="hud-label" id="lblScore">SCORE</div>
@@ -284,10 +344,9 @@
       <div class="hud-label" id="lblCombo">COMBO</div>
       <div class="hud-value" id="comboVal">0</div>
     </div>
-    <div class="hud-block" id="goalWrap">
-      <div class="hud-label" id="lblGoal">목표 수익</div>
-      <div id="goalBarOuter"><div id="goalBarInner"></div></div>
-      <div id="goalText">0 / 0</div>
+    <div class="hud-block" id="livesWrap">
+      <div class="hud-label" id="lblLives">LIVES</div>
+      <div class="hud-value" id="livesVal">♥♥♥</div>
     </div>
     <div class="hud-block" id="langWrap">
       <div class="hud-label" id="lblLang">LANGUAGE</div>
@@ -296,12 +355,13 @@
   </div>
 
   <div id="legend">
-    <div class="legend-item"><span class="legend-dot dot-left"></span><span id="legLeft">좌클릭</span></div>
-    <div class="legend-item"><span class="legend-dot dot-right"></span><span id="legRight">우클릭</span></div>
-    <div class="legend-item"><span class="legend-dot dot-both"></span><span id="legBoth">좌우 동시클릭</span></div>
-    <div class="legend-item"><span class="legend-dot dot-hold"></span><span id="legHold">꾹 클릭(홀드)</span></div>
-    <div class="legend-item"><span class="legend-dot dot-multi"></span><span id="legMulti">연속 클릭</span></div>
+    <div class="legend-item" id="legItemLeft"><span class="legend-dot dot-left"></span><span id="legLeft">좌클릭</span></div>
+    <div class="legend-item" id="legItemRight"><span class="legend-dot dot-right"></span><span id="legRight">우클릭</span></div>
+    <div class="legend-item" id="legItemBoth"><span class="legend-dot dot-both"></span><span id="legBoth">좌우 동시클릭</span></div>
+    <div class="legend-item" id="legItemHold"><span class="legend-dot dot-hold"></span><span id="legHold">꾹 클릭(홀드)</span></div>
+    <div class="legend-item" id="legItemMulti"><span class="legend-dot dot-multi"></span><span id="legMulti">연속 클릭</span></div>
   </div>
+  <div class="unlock-toast" id="unlockToast"></div>
 
   <!-- START -->
   <div class="overlay" id="startOverlay">
@@ -344,10 +404,6 @@
         <label id="lblNickname">닉네임 (리더보드용)</label>
         <input type="text" id="nicknameInput" maxlength="16" placeholder="Player">
       </div>
-      <div class="field">
-        <label id="lblGoalInput">목표 수익 (점수)</label>
-        <input type="number" id="goalInput" value="1000" min="100" step="100">
-      </div>
       <button class="btn" id="startBtn">게임 시작</button>
       <div id="leaderboardStart" style="margin-top:18px; text-align:left;">
         <div class="hud-label" id="lblLeaderboard" style="margin-bottom:8px;">🏆 LEADERBOARD</div>
@@ -369,21 +425,20 @@
     </div>
   </div>
 
-  <!-- WIN -->
-  <div class="overlay hidden" id="winOverlay">
+  <!-- GAME OVER -->
+  <div class="overlay hidden" id="gameOverOverlay">
     <div class="card">
-      <h1 id="winTitle">목표 달성!</h1>
-      <p id="winSubtitle">목표 수익을 달성했습니다. 계속 플레이하거나 다시 시작할 수 있어요.</p>
-      <div class="stat-row"><span id="lblFinalScore">최종 점수</span> <b id="winScore">0</b></div>
-      <div class="stat-row"><span id="lblMaxCombo">최고 콤보</span> <b id="winCombo">0</b></div>
-      <button class="btn" id="continueBtn">계속 플레이 (목표 1.5배 상향)</button>
-      <button class="btn secondary" id="restartFromWinBtn">다시 시작</button>
-      <div id="leaderboardWin" style="margin-top:18px; text-align:left;">
-        <div class="hud-label" id="lblLeaderboardWin" style="margin-bottom:8px;">🏆 LEADERBOARD</div>
-        <div id="leaderboardListWin" style="font-size:13px; color:#d8d0f5;">불러오는 중...</div>
+      <h1 id="goTitle" style="background: linear-gradient(90deg, var(--danger), var(--multicolor), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent;">게임 오버</h1>
+      <p id="goSubtitle">목숨을 모두 잃었습니다. 다시 도전해보세요!</p>
+      <div class="stat-row"><span id="lblFinalScoreGo">최종 점수</span> <b id="goScore">0</b></div>
+      <div class="stat-row"><span id="lblMaxComboGo">최고 콤보</span> <b id="goCombo">0</b></div>
+      <button class="btn" id="restartFromGoBtn">다시 시작</button>
+      <div id="leaderboardGo" style="margin-top:18px; text-align:left;">
+        <div class="hud-label" id="lblLeaderboardGo" style="margin-bottom:8px;">🏆 LEADERBOARD</div>
+        <div id="leaderboardListGo" style="font-size:13px; color:#d8d0f5;">불러오는 중...</div>
       </div>
       <div style="margin-top:18px;">
-        <ins class="adsbygoogle" id="adUnitWin"
+        <ins class="adsbygoogle" id="adUnitGo"
              style="display:block"
              data-ad-client="ca-pub-8906694188680429"
              data-ad-slot="8957735561"
@@ -392,8 +447,6 @@
       </div>
     </div>
   </div>
-
-  <!-- (optional) simple pause/gameover not required, kept minimal -->
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -402,25 +455,31 @@
   const stage = document.getElementById('stage');
   const scoreVal = document.getElementById('scoreVal');
   const comboVal = document.getElementById('comboVal');
-  const goalBarInner = document.getElementById('goalBarInner');
-  const goalText = document.getElementById('goalText');
   const startOverlay = document.getElementById('startOverlay');
-  const winOverlay = document.getElementById('winOverlay');
-  const goalInput = document.getElementById('goalInput');
+  const gameOverOverlay = document.getElementById('gameOverOverlay');
   const chkLeft = document.getElementById('chkLeft');
   const chkRight = document.getElementById('chkRight');
   const chkBoth = document.getElementById('chkBoth');
   const chkHold = document.getElementById('chkHold');
   const chkMulti = document.getElementById('chkMulti');
   const startBtn = document.getElementById('startBtn');
-  const continueBtn = document.getElementById('continueBtn');
-  const restartFromWinBtn = document.getElementById('restartFromWinBtn');
-  const winScore = document.getElementById('winScore');
-  const winCombo = document.getElementById('winCombo');
+  const restartFromGoBtn = document.getElementById('restartFromGoBtn');
+  const goScore = document.getElementById('goScore');
+  const goCombo = document.getElementById('goCombo');
   const fireOverlay = document.getElementById('fireOverlay');
+  const glitchOverlay = document.getElementById('glitchOverlay');
   const nicknameInput = document.getElementById('nicknameInput');
   const leaderboardListStart = document.getElementById('leaderboardListStart');
-  const leaderboardListWin = document.getElementById('leaderboardListWin');
+  const leaderboardListGo = document.getElementById('leaderboardListGo');
+  const livesVal = document.getElementById('livesVal');
+  const unlockToast = document.getElementById('unlockToast');
+  const legendItemEls = {
+    left: document.getElementById('legItemLeft'),
+    right: document.getElementById('legItemRight'),
+    both: document.getElementById('legItemBoth'),
+    hold: document.getElementById('legItemHold'),
+    multi: document.getElementById('legItemMulti'),
+  };
 
   // ---------------- Supabase leaderboard ----------------
   const SUPABASE_URL = 'https://deapvdvevtzqjfexdrrl.supabase.co';
@@ -444,11 +503,11 @@
                   </div>`;
         }).join('');
     leaderboardListStart.innerHTML = html;
-    leaderboardListWin.innerHTML = html;
+    leaderboardListGo.innerHTML = html;
   }
 
   async function loadLeaderboard(){
-    if(!sb){ leaderboardListStart.textContent = '리더보드를 불러올 수 없습니다.'; leaderboardListWin.textContent=''; return; }
+    if(!sb){ leaderboardListStart.textContent = '리더보드를 불러올 수 없습니다.'; leaderboardListGo.textContent=''; return; }
     try{
       const { data, error } = await sb
         .from('scores')
@@ -459,7 +518,7 @@
       renderLeaderboard(data);
     }catch(err){
       leaderboardListStart.textContent = '리더보드를 불러올 수 없습니다.';
-      leaderboardListWin.textContent = '';
+      leaderboardListGo.textContent = '';
       console.error('Supabase load error:', err);
     }
   }
@@ -497,72 +556,77 @@
       intro:'화면에 뜨는 원을 제한시간 안에 정확한 방식으로 클릭하세요.<br>콤보가 쌓일수록 속도가 빨라지고 화면이 흔들립니다.',
       miniLeft:'좌클릭 원 — 10점', miniRight:'우클릭 원 — 10점', miniBoth:'좌우 동시클릭 원 — 25점 (희귀)',
       legLeft:'좌클릭', legRight:'우클릭', legBoth:'좌우 동시클릭',
-      goalLabel:'목표 수익 (점수)', startBtn:'게임 시작',
-      score:'SCORE', combo:'COMBO', goal:'목표 수익', langLabel:'언어',
-      winTitle:'목표 달성!', winSubtitle:'목표 수익을 달성했습니다. 계속 플레이하거나 다시 시작할 수 있어요.',
+      startBtn:'게임 시작',
+      score:'SCORE', combo:'COMBO', langLabel:'언어',
       finalScore:'최종 점수', maxCombo:'최고 콤보',
-      continueBtn:'계속 플레이 (목표 1.5배 상향)', restartBtn:'다시 시작',
+      restartBtn:'다시 시작',
       nickname:'닉네임 (리더보드용)', leaderboard:'🏆 리더보드',
       miniHold:'꾹 클릭(홀드) 원 — 20점', miniMulti:'연속 클릭 원 — 20점',
       legHold:'꾹 클릭(홀드)', legMulti:'연속 클릭',
       selectTypes:'등장시킬 클릭 방식 선택',
-      chkLeft:'좌클릭', chkRight:'우클릭', chkBoth:'좌우동시', chkHold:'꾹클릭', chkMulti:'연속클릭' },
+      chkLeft:'좌클릭', chkRight:'우클릭', chkBoth:'좌우동시', chkHold:'꾹클릭', chkMulti:'연속클릭',
+      lives:'목숨', newType:'새 클릭 방식 등장',
+      gameOverTitle:'게임 오버', gameOverSubtitle:'목숨을 모두 잃었습니다. 다시 도전해보세요!' },
     en: { name:'English',
       intro:'Click the circles that appear before time runs out — using the right method.<br>The higher your combo, the faster it gets and the screen starts to shake.',
       miniLeft:'Left-click circle — 10 pts', miniRight:'Right-click circle — 10 pts', miniBoth:'Left+Right at once — 25 pts (rare)',
       legLeft:'Left click', legRight:'Right click', legBoth:'Left+Right together',
-      goalLabel:'Target Score', startBtn:'Start Game',
-      score:'SCORE', combo:'COMBO', goal:'TARGET', langLabel:'Language',
-      winTitle:'Target Reached!', winSubtitle:'You hit your target score. Keep playing or start over.',
+      startBtn:'Start Game',
+      score:'SCORE', combo:'COMBO', langLabel:'Language',
       finalScore:'Final Score', maxCombo:'Best Combo',
-      continueBtn:'Keep Playing (target x1.5)', restartBtn:'Restart',
+      restartBtn:'Restart',
       nickname:'Nickname (for leaderboard)', leaderboard:'🏆 LEADERBOARD',
       miniHold:'Hold circle — 20 pts', miniMulti:'Rapid-click circle — 20 pts',
       legHold:'Hold click', legMulti:'Rapid click',
       selectTypes:'Select click types to include',
-      chkLeft:'Left click', chkRight:'Right click', chkBoth:'Left+Right', chkHold:'Hold', chkMulti:'Rapid click' },
+      chkLeft:'Left click', chkRight:'Right click', chkBoth:'Left+Right', chkHold:'Hold', chkMulti:'Rapid click',
+      lives:'LIVES', newType:'New click type unlocked',
+      gameOverTitle:'Game Over', gameOverSubtitle:"You're out of lives. Give it another shot!" },
     ja: { name:'日本語',
       intro:'時間切れになる前に、正しい方法で円をクリックしてください。<br>コンボが増えるほど速度が上がり、画面が揺れます。',
       miniLeft:'左クリックの円 — 10点', miniRight:'右クリックの円 — 10点', miniBoth:'左右同時クリック — 25点（レア）',
       legLeft:'左クリック', legRight:'右クリック', legBoth:'左右同時クリック',
-      goalLabel:'目標スコア', startBtn:'ゲーム開始',
-      score:'SCORE', combo:'COMBO', goal:'目標', langLabel:'言語',
-      winTitle:'目標達成！', winSubtitle:'目標スコアを達成しました。続けるか、最初からやり直せます。',
+      startBtn:'ゲーム開始',
+      score:'SCORE', combo:'COMBO', langLabel:'言語',
       finalScore:'最終スコア', maxCombo:'最大コンボ',
-      continueBtn:'続ける（目標 x1.5）', restartBtn:'最初から',
+      restartBtn:'最初から',
       nickname:'ニックネーム（ランキング用）', leaderboard:'🏆 ランキング',
       miniHold:'長押しの円 — 20点', miniMulti:'連打の円 — 20点',
       legHold:'長押し', legMulti:'連打',
       selectTypes:'出現させるクリック方式を選択',
-      chkLeft:'左クリック', chkRight:'右クリック', chkBoth:'左右同時', chkHold:'長押し', chkMulti:'連打' },
+      chkLeft:'左クリック', chkRight:'右クリック', chkBoth:'左右同時', chkHold:'長押し', chkMulti:'連打',
+      lives:'ライフ', newType:'新しいクリック方式が登場',
+      gameOverTitle:'ゲームオーバー', gameOverSubtitle:'ライフがなくなりました。もう一度挑戦しましょう！' },
     zh: { name:'中文',
       intro:'在时间耗尽前，用正确的方式点击出现的圆圈。<br>连击越高，速度越快，屏幕也会震动。',
       miniLeft:'左键点击圆 — 10分', miniRight:'右键点击圆 — 10分', miniBoth:'左右同时点击 — 25分（稀有）',
       legLeft:'左键点击', legRight:'右键点击', legBoth:'左右同时点击',
-      goalLabel:'目标分数', startBtn:'开始游戏',
-      score:'分数', combo:'连击', goal:'目标', langLabel:'语言',
-      winTitle:'达成目标！', winSubtitle:'你已达成目标分数。可以继续游戏或重新开始。',
+      startBtn:'开始游戏',
+      score:'分数', combo:'连击', langLabel:'语言',
       finalScore:'最终分数', maxCombo:'最高连击',
-      continueBtn:'继续游戏（目标 x1.5）', restartBtn:'重新开始',
+      restartBtn:'重新开始',
       nickname:'昵称（用于排行榜）', leaderboard:'🏆 排行榜',
       miniHold:'长按圆 — 20分', miniMulti:'连续点击圆 — 20分',
       legHold:'长按', legMulti:'连续点击',
       selectTypes:'选择要出现的点击方式',
-      chkLeft:'左键点击', chkRight:'右键点击', chkBoth:'左右同时', chkHold:'长按', chkMulti:'连续点击' },
+      chkLeft:'左键点击', chkRight:'右键点击', chkBoth:'左右同时', chkHold:'长按', chkMulti:'连续点击',
+      lives:'生命值', newType:'解锁新点击方式',
+      gameOverTitle:'游戏结束', gameOverSubtitle:'生命值已耗尽。再挑战一次吧！' },
     es: { name:'Español',
       intro:'Haz clic en los círculos antes de que se acabe el tiempo, con el método correcto.<br>Cuanto mayor sea tu combo, más rápido va todo y la pantalla empieza a temblar.',
       miniLeft:'Círculo clic izquierdo — 10 pts', miniRight:'Círculo clic derecho — 10 pts', miniBoth:'Izquierdo+derecho a la vez — 25 pts (raro)',
       legLeft:'Clic izquierdo', legRight:'Clic derecho', legBoth:'Izquierdo+derecho juntos',
-      goalLabel:'Puntuación objetivo', startBtn:'Iniciar juego',
-      score:'PUNTOS', combo:'COMBO', goal:'OBJETIVO', langLabel:'Idioma',
-      winTitle:'¡Objetivo alcanzado!', winSubtitle:'Has alcanzado tu puntuación objetivo. Sigue jugando o vuelve a empezar.',
+      startBtn:'Iniciar juego',
+      score:'PUNTOS', combo:'COMBO', langLabel:'Idioma',
       finalScore:'Puntuación final', maxCombo:'Mejor combo',
-      continueBtn:'Seguir jugando (objetivo x1.5)', restartBtn:'Reiniciar',
+      restartBtn:'Reiniciar',
       nickname:'Apodo (para el ranking)', leaderboard:'🏆 CLASIFICACIÓN',
       miniHold:'Círculo de mantener pulsado — 20 pts', miniMulti:'Círculo de clics rápidos — 20 pts',
       legHold:'Mantener pulsado', legMulti:'Clics rápidos',
       selectTypes:'Elige los tipos de clic a incluir',
-      chkLeft:'Clic izquierdo', chkRight:'Clic derecho', chkBoth:'Izq+Der', chkHold:'Mantener', chkMulti:'Clics rápidos' },
+      chkLeft:'Clic izquierdo', chkRight:'Clic derecho', chkBoth:'Izq+Der', chkHold:'Mantener', chkMulti:'Clics rápidos',
+      lives:'VIDAS', newType:'Nuevo tipo de clic desbloqueado',
+      gameOverTitle:'Fin del juego', gameOverSubtitle:'Te quedaste sin vidas. ¡Inténtalo de nuevo!' },
   };
   let currentLang = 'ko';
   const langSelectHud = document.getElementById('langSelectHud');
@@ -586,22 +650,13 @@
     document.getElementById('legLeft').textContent = t.legLeft;
     document.getElementById('legRight').textContent = t.legRight;
     document.getElementById('legBoth').textContent = t.legBoth;
-    document.getElementById('lblGoalInput').textContent = t.goalLabel;
     document.getElementById('startBtn').textContent = t.startBtn;
     document.getElementById('lblScore').textContent = t.score;
     document.getElementById('lblCombo').textContent = t.combo;
-    document.getElementById('lblGoal').textContent = t.goal;
     document.getElementById('lblLang').textContent = 'Language';
     document.getElementById('lblLangSelect').textContent = 'Language';
-    document.getElementById('winTitle').textContent = t.winTitle;
-    document.getElementById('winSubtitle').textContent = t.winSubtitle;
-    document.getElementById('lblFinalScore').textContent = t.finalScore;
-    document.getElementById('lblMaxCombo').textContent = t.maxCombo;
-    document.getElementById('continueBtn').textContent = t.continueBtn;
-    document.getElementById('restartFromWinBtn').textContent = t.restartBtn;
     document.getElementById('lblNickname').textContent = t.nickname;
     document.getElementById('lblLeaderboard').textContent = t.leaderboard;
-    document.getElementById('lblLeaderboardWin').textContent = t.leaderboard;
     document.getElementById('miniHold').textContent = t.miniHold;
     document.getElementById('miniMulti').textContent = t.miniMulti;
     document.getElementById('legHold').textContent = t.legHold;
@@ -612,6 +667,13 @@
     document.getElementById('chkBothLabel').textContent = t.chkBoth;
     document.getElementById('chkHoldLabel').textContent = t.chkHold;
     document.getElementById('chkMultiLabel').textContent = t.chkMulti;
+    document.getElementById('lblLives').textContent = t.lives;
+    document.getElementById('goTitle').textContent = t.gameOverTitle;
+    document.getElementById('goSubtitle').textContent = t.gameOverSubtitle;
+    document.getElementById('lblFinalScoreGo').textContent = t.finalScore;
+    document.getElementById('lblMaxComboGo').textContent = t.maxCombo;
+    document.getElementById('restartFromGoBtn').textContent = t.restartBtn;
+    document.getElementById('lblLeaderboardGo').textContent = t.leaderboard;
   }
   langSelectHud.addEventListener('change', e=>applyLanguage(e.target.value));
   langSelectStart.addEventListener('change', e=>applyLanguage(e.target.value));
@@ -621,26 +683,28 @@
   let flameIntervalId = null;
 
   function heatTierFor(cb){
-    if(cb>=30) return 3;
-    if(cb>=18) return 2;
-    if(cb>=8) return 1;
+    if(cb>=40) return 4;
+    if(cb>=24) return 3;
+    if(cb>=14) return 2;
+    if(cb>=6) return 1;
     return 0;
   }
 
   function applyHeatTier(tier){
     if(tier===heatTier) return;
     heatTier = tier;
-    comboVal.classList.remove('fire-1','fire-2','fire-3');
-    fireOverlay.classList.remove('on1','on2','on3');
-    stage.classList.remove('heat1','heat2','heat3');
+    comboVal.classList.remove('fire-1','fire-2','fire-3','fire-4');
+    fireOverlay.classList.remove('on1','on2','on3','on4');
+    stage.classList.remove('heat1','heat2','heat3','heat4');
     if(tier>0){
       comboVal.classList.add('fire-'+tier);
       fireOverlay.classList.add('on'+tier);
       stage.classList.add('heat'+tier);
     }
+    glitchOverlay.classList.toggle('on', tier>=4);
     clearInterval(flameIntervalId);
     if(tier>0){
-      const rate = tier===3 ? 90 : tier===2 ? 160 : 280;
+      const rate = tier===4 ? 50 : tier===3 ? 85 : tier===2 ? 150 : 260;
       flameIntervalId = setInterval(spawnFlameParticle, rate);
     }
   }
@@ -648,12 +712,12 @@
   function spawnFlameParticle(){
     if(!running) return;
     const w = stage.clientWidth;
-    const count = heatTier===3 ? 2 : 1;
+    const count = heatTier===4 ? 3 : heatTier===3 ? 2 : 1;
     for(let i=0;i<count;i++){
       const p = document.createElement('div');
       p.className = 'flame-particle';
       const size = 14 + Math.random()*(10+heatTier*8);
-      p.style.width = size+'px'; p.style.height = size*1.2+'px';
+      p.style.width = (size*0.22)+'px'; p.style.height = (size*1.9)+'px';
       p.style.left = (Math.random()*w)+'px';
       const rise = 220 + Math.random()*260 + heatTier*40;
       const sway = (Math.random()*40-20);
@@ -693,16 +757,24 @@
   function sfxWrong(){ tone(140,0.15,'square',0.12); }
   function sfxCombo(tier){
     const base = 440 + tier*40;
-    tone(base,0.1,'triangle',0.14);
-    tone(base*1.25,0.1,'triangle',0.14,0.06);
-    tone(base*1.5,0.14,'triangle',0.16,0.12);
+    tone(90 + tier*6, 0.16, 'square', Math.min(0.26, 0.14+tier*0.012));
+    tone(base,0.1,'triangle',0.16);
+    tone(base*1.25,0.1,'triangle',0.16,0.06);
+    tone(base*1.5,0.14,'triangle',0.18,0.12);
+    tone(base*2.4,0.05,'sawtooth',0.07,0.02);
   }
-  function sfxWin(){
-    [523,659,784,1046].forEach((f,i)=>tone(f,0.22,'triangle',0.18,i*0.1));
+  function sfxGameOver(){
+    [392,330,262,196].forEach((f,i)=>tone(f,0.28,'sawtooth',0.16,i*0.12));
+  }
+  function sfxUnlock(){
+    tone(700,0.1,'triangle',0.16); tone(1000,0.14,'triangle',0.18,0.09);
+  }
+  function sfxLifeGain(){
+    tone(660,0.1,'sine',0.16); tone(880,0.14,'sine',0.18,0.08);
   }
 
   // ---- game state ----
-  let running=false, score=0, combo=0, maxCombo=0, goal=1000;
+  let running=false, score=0, combo=0, maxCombo=0;
   let active=[]; let spawnTimeoutId=null; let idCounter=0;
   const TYPES = [
     {key:'left',  cls:'type-left',  weight:26, points:10, icon:'L'},
@@ -713,14 +785,75 @@
   ];
   const BOTH_WINDOW_MS = 200; // max gap allowed between the two clicks to count as simultaneous
   const MULTI_GAP_MS = 260; // max gap allowed between consecutive clicks to keep the streak alive
+
+  // progression: types unlock one at a time as combo builds, instead of all
+  // being available from the start — keeps early game simple and adds
+  // variety as the player proves they can handle it
+  const TYPE_ORDER = ['left','right','both','hold','multi'];
+  const UNLOCK_COMBO = { left:0, right:6, both:14, hold:22, multi:32 };
   let enabledTypes = new Set(['left','right','both','hold','multi']);
+  let unlockedTypes = new Set(['left']);
+
+  // failure state: run ends when lives hit 0; sustained combos earn lives back
+  const START_LIVES = 3, MAX_LIVES = 5, LIFE_GAIN_INTERVAL = 20;
+  let lives = START_LIVES;
+
   function pickType(){
-    const pool = TYPES.filter(t=>enabledTypes.has(t.key));
-    const list = pool.length ? pool : TYPES;
+    const pool = TYPES.filter(t=>unlockedTypes.has(t.key) && enabledTypes.has(t.key));
+    const list = pool.length ? pool : TYPES.filter(t=>enabledTypes.has(t.key));
     const total = list.reduce((s,t)=>s+t.weight,0);
     let r = Math.random()*total;
     for(const t of list){ if(r<t.weight) return t; r-=t.weight; }
     return list[0];
+  }
+
+  function updateLivesHud(){
+    let s = '';
+    for(let i=0;i<MAX_LIVES;i++) s += (i<lives) ? '♥' : '♡';
+    livesVal.textContent = s;
+  }
+
+  function loseLife(){
+    if(!running) return;
+    lives = Math.max(0, lives-1);
+    updateLivesHud();
+    livesVal.classList.remove('lostpulse');
+    void livesVal.offsetWidth;
+    livesVal.classList.add('lostpulse');
+    stage.classList.remove('hitflash');
+    void stage.offsetWidth;
+    stage.classList.add('hitflash');
+    if(lives<=0) triggerGameOver();
+  }
+
+  let unlockToastTimeout = null;
+  function announceUnlock(key){
+    const t = I18N[currentLang];
+    const labelKey = 'leg' + key.charAt(0).toUpperCase() + key.slice(1);
+    unlockToast.textContent = t.newType + ': ' + (t[labelKey] || key);
+    unlockToast.classList.add('show');
+    clearTimeout(unlockToastTimeout);
+    unlockToastTimeout = setTimeout(()=>unlockToast.classList.remove('show'), 1900);
+    sfxUnlock();
+  }
+
+  function updateLegendLocks(){
+    TYPE_ORDER.forEach(k=>{
+      const item = legendItemEls[k];
+      if(item) item.classList.toggle('locked', !unlockedTypes.has(k));
+    });
+  }
+
+  function updateUnlocks(){
+    let newlyUnlocked = null;
+    TYPE_ORDER.forEach(k=>{
+      if(enabledTypes.has(k) && combo>=UNLOCK_COMBO[k] && !unlockedTypes.has(k)){
+        unlockedTypes.add(k);
+        newlyUnlocked = k;
+      }
+    });
+    updateLegendLocks();
+    if(newlyUnlocked) announceUnlock(newlyUnlocked);
   }
 
   function diffParams(){
@@ -733,10 +866,8 @@
   function updateHud(){
     scoreVal.textContent = score;
     comboVal.textContent = combo;
-    const pct = Math.min(100, (score/goal)*100);
-    goalBarInner.style.width = pct+'%';
-    goalText.textContent = `${score} / ${goal}`;
     applyHeatTier(heatTierFor(combo));
+    updateUnlocks();
   }
 
   function popCombo(){
@@ -746,22 +877,26 @@
   }
 
   function shakeStage(intensity){
-    const px = Math.min(14, 3+intensity*2);
+    const px = Math.min(22, 5+intensity*3.2);
+    const punch = Math.min(1.035, 1 + intensity*0.006);
     stage.style.setProperty('--sx', px+'px');
     stage.style.setProperty('--sy', (px*0.6)+'px');
+    stage.style.setProperty('--punch', punch.toFixed(3));
     stage.classList.remove('shake');
     void stage.offsetWidth;
     stage.classList.add('shake');
   }
 
-  function spawnBurst(x,y,color,count=10){
+  function spawnBurst(x,y,color,count=10,spread=1){
     for(let i=0;i<count;i++){
       const p = document.createElement('div');
       p.className='burst';
       p.style.left = x+'px'; p.style.top = y+'px';
       p.style.background = color; p.style.color = color;
+      const size = 10 + (spread-1)*6;
+      p.style.width = size+'px'; p.style.height = size+'px';
       const ang = Math.random()*Math.PI*2;
-      const dist = 30+Math.random()*40;
+      const dist = (30+Math.random()*40) * spread;
       p.style.setProperty('--bx', Math.cos(ang)*dist+'px');
       p.style.setProperty('--by', Math.sin(ang)*dist+'px');
       stage.appendChild(p);
@@ -769,10 +904,20 @@
     }
   }
 
-  function floatScoreText(x,y,text,color){
+  function spawnShockwave(x,y,color,size=90){
+    const r = document.createElement('div');
+    r.className='shockwave';
+    r.style.left=x+'px'; r.style.top=y+'px';
+    r.style.width=size+'px'; r.style.height=size+'px';
+    r.style.color=color;
+    stage.appendChild(r);
+    setTimeout(()=>r.remove(), 520);
+  }
+
+  function floatScoreText(x,y,text,color,size=18){
     const el = document.createElement('div');
     el.className='floatScore'; el.textContent=text; el.style.color=color;
-    el.style.left=x+'px'; el.style.top=y+'px';
+    el.style.left=x+'px'; el.style.top=y+'px'; el.style.fontSize=size+'px';
     stage.appendChild(el);
     setTimeout(()=>el.remove(), 720);
   }
@@ -785,7 +930,9 @@
   function onMiss(c){
     if(!c.alive) return; c.alive=false;
     c.el.classList.add('missed');
-    combo = 0; updateHud();
+    combo = 0;
+    loseLife();
+    updateHud();
     sfxMiss();
     setTimeout(()=>removeCircle(c), 220);
   }
@@ -810,21 +957,25 @@
     score += gained;
 
     const colorVar = getComputedStyle(c.el).color;
-    spawnBurst(cx, cy, colorVar, 12);
-    floatScoreText(cx, cy-10, '+'+gained, colorVar);
+    spawnBurst(cx, cy, colorVar, 12 + heatTier*6, 1 + heatTier*0.3);
+    spawnShockwave(cx, cy, colorVar, 70 + heatTier*26);
+    floatScoreText(cx, cy-10, '+'+gained, colorVar, 18 + heatTier*3);
     sfxPop(c.type.key);
     popCombo();
     updateHud();
 
-    if(combo>0 && combo%5===0){
-      shakeStage(combo/5);
-      sfxCombo(combo/5);
+    if(combo>0 && combo%3===0){
+      shakeStage(combo/3);
+      sfxCombo(combo/3);
+    }
+    if(combo>0 && combo%LIFE_GAIN_INTERVAL===0 && lives<MAX_LIVES){
+      lives++;
+      updateLivesHud();
+      sfxLifeGain();
     }
 
     c.el.classList.add('dying');
     setTimeout(()=>removeCircle(c), 170);
-
-    if(score>=goal){ triggerWin(); }
   }
 
   function handlePointer(c, evt){
@@ -869,6 +1020,20 @@
   function pauseTimer(c){ c.timerPaused = true; }
   function resumeTimer(c){ c.timerPaused = false; }
 
+  // while the player is mid-hold or mid-multi-click streak, hold off on
+  // spawning new circles — those interactions take real time to finish,
+  // and a fresh circle appearing elsewhere just steals attention from the
+  // one already in hand, making it hard to reach in time once free
+  let busyInteractions = 0;
+  function pauseSpawning(){
+    busyInteractions++;
+    if(busyInteractions===1) clearTimeout(spawnTimeoutId);
+  }
+  function resumeSpawning(){
+    busyInteractions = Math.max(0, busyInteractions-1);
+    if(busyInteractions===0) scheduleNextSpawn();
+  }
+
   function timerTick(now){
     for(const c of active){
       if(!c.alive) continue;
@@ -893,6 +1058,7 @@
     c.holding = true;
     c.el.classList.add('holding');
     pauseTimer(c); // freeze the auto-expire bar while actively holding
+    pauseSpawning();
     const ms = c.type.holdMs || 650;
     const holdfill = c.el.querySelector('.holdfill');
     const startTime = performance.now();
@@ -906,12 +1072,13 @@
       c.chargeRAF = requestAnimationFrame(chargeStep);
     }
     c.holdTimeout = setTimeout(()=>{
-      if(c.holding && c.alive){ c.holding=false; onCorrectClick(c, null); }
+      if(c.holding && c.alive){ c.holding=false; resumeSpawning(); onCorrectClick(c, null); }
     }, ms);
   }
   function cancelHold(c){
     if(!c.holding) return;
     c.holding = false;
+    resumeSpawning();
     clearTimeout(c.holdTimeout);
     cancelAnimationFrame(c.chargeRAF);
     if(c.el){
@@ -937,7 +1104,10 @@
       if(fill) fill.style.setProperty('--charge', '0');
       if(iconEl) iconEl.textContent = c.type.icon;
     }
-    if(!c.multiCount) pauseTimer(c); // freeze the auto-expire bar while mid-streak
+    if(!c.multiCount){
+      pauseTimer(c); // freeze the auto-expire bar while mid-streak
+      if(!c.spawnPaused){ c.spawnPaused = true; pauseSpawning(); }
+    }
     c.multiCount = (c.multiCount||0) + 1;
     c.multiLast = now;
     clearTimeout(c.multiResumeTimeout);
@@ -953,6 +1123,7 @@
     if(iconEl) iconEl.textContent = 'x'+Math.max(0, required - c.multiCount);
 
     if(c.multiCount >= required){
+      if(c.spawnPaused){ c.spawnPaused = false; resumeSpawning(); }
       onCorrectClick(c, null);
     } else {
       c.el.style.setProperty('--pulseScale', Math.min(1.55, 1.18 + c.multiCount*0.09).toFixed(2));
@@ -965,6 +1136,7 @@
         if(c.alive){
           c.multiCount = 0;
           resumeTimer(c);
+          if(c.spawnPaused){ c.spawnPaused = false; resumeSpawning(); }
           if(fill) fill.style.setProperty('--charge', '0');
           if(iconEl) iconEl.textContent = c.type.icon;
         }
@@ -1022,7 +1194,6 @@
 
   function startGame(){
     ensureAudio();
-    goal = Math.max(100, parseInt(goalInput.value)||1000);
     const selected = new Set();
     if(chkLeft.checked) selected.add('left');
     if(chkRight.checked) selected.add('right');
@@ -1032,38 +1203,36 @@
     enabledTypes = selected.size ? selected : new Set(['left','right','both','hold','multi']);
     if(!selected.size){ chkLeft.checked=chkRight.checked=chkBoth.checked=chkHold.checked=chkMulti.checked=true; }
     score=0; combo=0; maxCombo=0; running=true;
+    lives = START_LIVES;
+    unlockedTypes = new Set([TYPE_ORDER.find(k=>enabledTypes.has(k)) || 'left']);
+    updateLivesHud();
+    updateLegendLocks();
     updateHud();
     startOverlay.classList.add('hidden');
-    winOverlay.classList.add('hidden');
+    gameOverOverlay.classList.add('hidden');
     clearAllCircles();
     scheduleNextSpawn();
     spawnCircle();
   }
 
-  function triggerWin(){
+  function triggerGameOver(){
     running=false;
     clearTimeout(spawnTimeoutId);
-    sfxWin();
-    winScore.textContent = score;
-    winCombo.textContent = maxCombo;
+    clearAllCircles();
+    sfxGameOver();
+    goScore.textContent = score;
+    goCombo.textContent = maxCombo;
     submitScore(nicknameInput.value.trim(), score, maxCombo);
     setTimeout(()=>{
-      winOverlay.classList.remove('hidden');
-      loadAd('adUnitWin');
+      gameOverOverlay.classList.remove('hidden');
+      loadAd('adUnitGo');
     }, 300);
   }
 
   startBtn.addEventListener('click', startGame);
-  restartFromWinBtn.addEventListener('click', ()=>{
-    winOverlay.classList.add('hidden');
+  restartFromGoBtn.addEventListener('click', ()=>{
+    gameOverOverlay.classList.add('hidden');
     startOverlay.classList.remove('hidden');
-  });
-  continueBtn.addEventListener('click', ()=>{
-    goal = Math.round(goal*1.5);
-    winOverlay.classList.add('hidden');
-    running=true;
-    updateHud();
-    scheduleNextSpawn();
   });
 
   // prevent right-click menu globally, and middle-click autoscroll
