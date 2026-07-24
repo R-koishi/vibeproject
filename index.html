@@ -367,6 +367,11 @@
   <div class="overlay" id="startOverlay">
     <div class="card">
       <h1>NEON PULSE</h1>
+      <div style="margin:-6px 0 16px; font-size:13px;">
+        <a id="aboutLinkStart" href="about.html" style="color:#00f0ff; text-decoration:underline;">소개</a>
+        &nbsp;·&nbsp;
+        <a id="privacyLinkStart" href="privacy-policy.html" style="color:#00f0ff; text-decoration:underline;">개인정보처리방침</a>
+      </div>
       <div class="field">
         <label id="lblLangSelect">LANGUAGE</label>
         <select id="langSelectStart"></select>
@@ -417,11 +422,6 @@
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
       </div>
-      <div style="margin-top:14px; font-size:11px; color:#7d70a8;">
-        <a href="about.html" style="color:#a596e0; text-decoration:none;">소개</a>
-        &nbsp;·&nbsp;
-        <a href="privacy-policy.html" style="color:#a596e0; text-decoration:none;">개인정보처리방침</a>
-      </div>
     </div>
   </div>
 
@@ -444,6 +444,11 @@
              data-ad-slot="8957735561"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
+      </div>
+      <div style="margin-top:14px; font-size:13px;">
+        <a id="aboutLinkGo" href="about.html" style="color:#00f0ff; text-decoration:underline;">소개</a>
+        &nbsp;·&nbsp;
+        <a id="privacyLinkGo" href="privacy-policy.html" style="color:#00f0ff; text-decoration:underline;">개인정보처리방침</a>
       </div>
     </div>
   </div>
@@ -566,7 +571,8 @@
       selectTypes:'등장시킬 클릭 방식 선택',
       chkLeft:'좌클릭', chkRight:'우클릭', chkBoth:'좌우동시', chkHold:'꾹클릭', chkMulti:'연속클릭',
       lives:'목숨', newType:'새 클릭 방식 등장',
-      gameOverTitle:'게임 오버', gameOverSubtitle:'목숨을 모두 잃었습니다. 다시 도전해보세요!' },
+      gameOverTitle:'게임 오버', gameOverSubtitle:'목숨을 모두 잃었습니다. 다시 도전해보세요!',
+      aboutLink:'소개', privacyLink:'개인정보처리방침', aboutHref:'about.html', privacyHref:'privacy-policy.html' },
     en: { name:'English',
       intro:'Click the circles that appear before time runs out — using the right method.<br>The higher your combo, the faster it gets and the screen starts to shake.',
       miniLeft:'Left-click circle — 10 pts', miniRight:'Right-click circle — 10 pts', miniBoth:'Left+Right at once — 25 pts (rare)',
@@ -581,7 +587,8 @@
       selectTypes:'Select click types to include',
       chkLeft:'Left click', chkRight:'Right click', chkBoth:'Left+Right', chkHold:'Hold', chkMulti:'Rapid click',
       lives:'LIVES', newType:'New click type unlocked',
-      gameOverTitle:'Game Over', gameOverSubtitle:"You're out of lives. Give it another shot!" },
+      gameOverTitle:'Game Over', gameOverSubtitle:"You're out of lives. Give it another shot!",
+      aboutLink:'About', privacyLink:'Privacy Policy', aboutHref:'about-en.html', privacyHref:'privacy-policy-en.html' },
     ja: { name:'日本語',
       intro:'時間切れになる前に、正しい方法で円をクリックしてください。<br>コンボが増えるほど速度が上がり、画面が揺れます。',
       miniLeft:'左クリックの円 — 10点', miniRight:'右クリックの円 — 10点', miniBoth:'左右同時クリック — 25点（レア）',
@@ -596,7 +603,8 @@
       selectTypes:'出現させるクリック方式を選択',
       chkLeft:'左クリック', chkRight:'右クリック', chkBoth:'左右同時', chkHold:'長押し', chkMulti:'連打',
       lives:'ライフ', newType:'新しいクリック方式が登場',
-      gameOverTitle:'ゲームオーバー', gameOverSubtitle:'ライフがなくなりました。もう一度挑戦しましょう！' },
+      gameOverTitle:'ゲームオーバー', gameOverSubtitle:'ライフがなくなりました。もう一度挑戦しましょう！',
+      aboutLink:'ゲーム紹介', privacyLink:'プライバシーポリシー', aboutHref:'about.html', privacyHref:'privacy-policy.html' },
     zh: { name:'中文',
       intro:'在时间耗尽前，用正确的方式点击出现的圆圈。<br>连击越高，速度越快，屏幕也会震动。',
       miniLeft:'左键点击圆 — 10分', miniRight:'右键点击圆 — 10分', miniBoth:'左右同时点击 — 25分（稀有）',
@@ -611,7 +619,8 @@
       selectTypes:'选择要出现的点击方式',
       chkLeft:'左键点击', chkRight:'右键点击', chkBoth:'左右同时', chkHold:'长按', chkMulti:'连续点击',
       lives:'生命值', newType:'解锁新点击方式',
-      gameOverTitle:'游戏结束', gameOverSubtitle:'生命值已耗尽。再挑战一次吧！' },
+      gameOverTitle:'游戏结束', gameOverSubtitle:'生命值已耗尽。再挑战一次吧！',
+      aboutLink:'游戏介绍', privacyLink:'隐私政策', aboutHref:'about.html', privacyHref:'privacy-policy.html' },
     es: { name:'Español',
       intro:'Haz clic en los círculos antes de que se acabe el tiempo, con el método correcto.<br>Cuanto mayor sea tu combo, más rápido va todo y la pantalla empieza a temblar.',
       miniLeft:'Círculo clic izquierdo — 10 pts', miniRight:'Círculo clic derecho — 10 pts', miniBoth:'Izquierdo+derecho a la vez — 25 pts (raro)',
@@ -626,7 +635,8 @@
       selectTypes:'Elige los tipos de clic a incluir',
       chkLeft:'Clic izquierdo', chkRight:'Clic derecho', chkBoth:'Izq+Der', chkHold:'Mantener', chkMulti:'Clics rápidos',
       lives:'VIDAS', newType:'Nuevo tipo de clic desbloqueado',
-      gameOverTitle:'Fin del juego', gameOverSubtitle:'Te quedaste sin vidas. ¡Inténtalo de nuevo!' },
+      gameOverTitle:'Fin del juego', gameOverSubtitle:'Te quedaste sin vidas. ¡Inténtalo de nuevo!',
+      aboutLink:'Acerca de', privacyLink:'Política de privacidad', aboutHref:'about.html', privacyHref:'privacy-policy.html' },
   };
   let currentLang = 'ko';
   const langSelectHud = document.getElementById('langSelectHud');
@@ -674,6 +684,14 @@
     document.getElementById('lblMaxComboGo').textContent = t.maxCombo;
     document.getElementById('restartFromGoBtn').textContent = t.restartBtn;
     document.getElementById('lblLeaderboardGo').textContent = t.leaderboard;
+    ['aboutLinkStart','aboutLinkGo'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.textContent = t.aboutLink; el.href = t.aboutHref;
+    });
+    ['privacyLinkStart','privacyLinkGo'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.textContent = t.privacyLink; el.href = t.privacyHref;
+    });
   }
   langSelectHud.addEventListener('change', e=>applyLanguage(e.target.value));
   langSelectStart.addEventListener('change', e=>applyLanguage(e.target.value));
